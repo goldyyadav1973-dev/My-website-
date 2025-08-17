@@ -93,21 +93,6 @@
         opacity: 0;
       }
     }
-
-    /* Music button */
-    #musicButton {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 10px 15px;
-      font-size: 1em;
-      background: rgba(255,255,255,0.3);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      z-index: 3;
-    }
   </style>
 </head>
 <body>
@@ -136,28 +121,26 @@
   </footer>
 
   <!-- Background Music -->
-  <audio id="bgMusic" loop playsinline>
+  <audio id="bgMusic" loop autoplay muted playsinline>
     <source src="jhol.m4a" type="audio/m4a">
     Your browser does not support the audio element.
   </audio>
 
-  <button id="musicButton">🎵 Play Music</button>
-
-  <!-- Animation scripts -->
   <script>
-    // Music control
     const music = document.getElementById('bgMusic');
-    const musicButton = document.getElementById('musicButton');
 
-    musicButton.addEventListener('click', () => {
-      if (music.paused) {
-        music.play();
-        musicButton.innerText = '🔊 Pause Music';
-      } else {
-        music.pause();
-        musicButton.innerText = '🎵 Play Music';
-      }
-    });
+    // Attempt to unmute and play after first user interaction
+    function startMusic() {
+      music.muted = false;
+      music.play().catch(() => {});
+      // Remove the listener after first tap/click
+      window.removeEventListener('click', startMusic);
+      window.removeEventListener('touchstart', startMusic);
+    }
+
+    // Wait for any user interaction to unmute
+    window.addEventListener('click', startMusic);
+    window.addEventListener('touchstart', startMusic);
 
     // Falling Hearts
     function createHeart() {
