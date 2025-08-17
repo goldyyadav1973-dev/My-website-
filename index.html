@@ -37,6 +37,7 @@
     }
     .gallery img {
       width: 100%;
+      height: auto;
       border-radius: 15px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
       transition: transform 0.3s;
@@ -67,6 +68,7 @@
       font-size: 20px;
       color: red;
       animation: fall linear forwards;
+      animation-timing-function: ease-in;
       z-index: 1;
     }
     @keyframes fall {
@@ -82,6 +84,7 @@
       bottom: -50px;
       font-size: 30px;
       animation: rise linear forwards;
+      animation-timing-function: ease-out;
       z-index: 1;
     }
     @keyframes rise {
@@ -89,6 +92,21 @@
         transform: translateY(-110vh);
         opacity: 0;
       }
+    }
+
+    /* Music button */
+    #musicButton {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 10px 15px;
+      font-size: 1em;
+      background: rgba(255,255,255,0.3);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      z-index: 3;
     }
   </style>
 </head>
@@ -99,7 +117,6 @@
   </header>
 
   <section class="gallery">
-    <!-- Replace with your photos -->
     <img src="Screenshot_20250817_185045.jpg" alt="Her beautiful photo">
     <img src="Screenshot_20250817_185048.jpg" alt="Memory 2">
     <img src="Screenshot_20250817_185051.jpg" alt="Memory 3">
@@ -119,13 +136,29 @@
   </footer>
 
   <!-- Background Music -->
-  <audio autoplay loop>
+  <audio id="bgMusic" loop playsinline>
     <source src="jhol.m4a" type="audio/m4a">
     Your browser does not support the audio element.
   </audio>
 
+  <button id="musicButton">🎵 Play Music</button>
+
   <!-- Animation scripts -->
   <script>
+    // Music control
+    const music = document.getElementById('bgMusic');
+    const musicButton = document.getElementById('musicButton');
+
+    musicButton.addEventListener('click', () => {
+      if (music.paused) {
+        music.play();
+        musicButton.innerText = '🔊 Pause Music';
+      } else {
+        music.pause();
+        musicButton.innerText = '🎵 Play Music';
+      }
+    });
+
     // Falling Hearts
     function createHeart() {
       const heart = document.createElement('div');
@@ -135,9 +168,7 @@
       heart.style.animationDuration = (3 + Math.random() * 5) + 's';
       document.body.appendChild(heart);
 
-      setTimeout(() => {
-        heart.remove();
-      }, 8000);
+      setTimeout(() => heart.remove(), 8000);
     }
     setInterval(createHeart, 500);
 
@@ -151,9 +182,7 @@
       balloon.style.animationDuration = (4 + Math.random() * 6) + 's';
       document.body.appendChild(balloon);
 
-      setTimeout(() => {
-        balloon.remove();
-      }, 10000);
+      setTimeout(() => balloon.remove(), 10000);
     }
     setInterval(createBalloon, 1200);
   </script>
